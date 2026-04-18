@@ -1,0 +1,2610 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Master · 雅思学习助手</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+    <style>
+        /* ===== CSS Variables & Reset ===== */
+        :root {
+            --primary: #5B7FFF;
+            --primary-light: #8BA4FF;
+            --primary-dark: #3D5BD6;
+            --accent-orange: #FF8C42;
+            --accent-green: #4ECDC4;
+            --accent-pink: #FF6B9D;
+            --accent-purple: #A78BFA;
+            --accent-yellow: #FBBF24;
+            --bg-cream: #FFF9F0;
+            --bg-white: #FFFFFF;
+            --bg-card: #FFFFFF;
+            --text-dark: #2D3748;
+            --text-medium: #4A5568;
+            --text-light: #718096;
+            --text-lighter: #A0AEC0;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+            --shadow-hover: 0 12px 40px rgba(0,0,0,0.15);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ===== Scrollbar ===== */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--primary-light); border-radius: 3px; }
+
+        /* ===== Page Container ===== */
+        .page { display: none; min-height: 100vh; animation: fadeIn 0.4s ease; }
+        .page.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        /* ===== Header ===== */
+        .app-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 12px rgba(91, 127, 255, 0.3);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .header-logo {
+            width: 40px; height: 40px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-title {
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .header-subtitle {
+            color: rgba(255,255,255,0.7);
+            font-size: 11px;
+            font-weight: 400;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-btn {
+            background: rgba(255,255,255,0.15);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        .header-btn:hover { background: rgba(255,255,255,0.25); }
+
+        .streak-badge {
+            background: linear-gradient(135deg, #FF8C42, #FF6B9D);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* ===== Home Page ===== */
+        .home-hero {
+            background: linear-gradient(135deg, #5B7FFF 0%, #8BA4FF 50%, #A78BFA 100%);
+            padding: 40px 24px 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .home-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .hero-greeting {
+            color: rgba(255,255,255,0.9);
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .hero-title {
+            color: white;
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .hero-quote {
+            color: rgba(255,255,255,0.8);
+            font-size: 13px;
+            font-style: italic;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* Stats Row */
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin: -30px 20px 30px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .stat-card {
+            background: var(--bg-white);
+            border-radius: var(--radius-lg);
+            padding: 16px 24px;
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            flex: 1;
+            max-width: 160px;
+            transition: var(--transition);
+        }
+
+        .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--text-light);
+            margin-top: 2px;
+        }
+
+        /* Module Grid */
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-dark);
+            padding: 0 24px;
+            margin: 24px 0 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .module-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            padding: 0 20px;
+            margin-bottom: 24px;
+        }
+
+        .module-card {
+            background: var(--bg-white);
+            border-radius: var(--radius-xl);
+            padding: 24px 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+            animation: slideUp 0.5s ease both;
+        }
+
+        .module-card:nth-child(1) { animation-delay: 0.05s; }
+        .module-card:nth-child(2) { animation-delay: 0.1s; }
+        .module-card:nth-child(3) { animation-delay: 0.15s; }
+        .module-card:nth-child(4) { animation-delay: 0.2s; }
+
+        .module-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .module-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .module-card.reading::before { background: linear-gradient(90deg, #5B7FFF, #8BA4FF); }
+        .module-card.listening::before { background: linear-gradient(90deg, #4ECDC4, #44B09E); }
+        .module-card.writing::before { background: linear-gradient(90deg, #FF8C42, #FFA07A); }
+        .module-card.speaking::before { background: linear-gradient(90deg, #FF6B9D, #FF8EC7); }
+
+        .module-icon {
+            width: 52px; height: 52px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            margin-bottom: 14px;
+        }
+
+        .module-card.reading .module-icon { background: linear-gradient(135deg, #EBF0FF, #D6E0FF); }
+        .module-card.listening .module-icon { background: linear-gradient(135deg, #E6FAF8, #D0F5F0); }
+        .module-card.writing .module-icon { background: linear-gradient(135deg, #FFF0E6, #FFE0CC); }
+        .module-card.speaking .module-icon { background: linear-gradient(135deg, #FFE6EF, #FFCCD9); }
+
+        .module-name {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .module-desc {
+            font-size: 12px;
+            color: var(--text-light);
+            line-height: 1.5;
+        }
+
+        .module-progress {
+            margin-top: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 5px;
+            background: #F0F0F0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.8s ease;
+        }
+
+        .module-card.reading .progress-fill { background: linear-gradient(90deg, #5B7FFF, #8BA4FF); }
+        .module-card.listening .progress-fill { background: linear-gradient(90deg, #4ECDC4, #44B09E); }
+        .module-card.writing .progress-fill { background: linear-gradient(90deg, #FF8C42, #FFA07A); }
+        .module-card.speaking .progress-fill { background: linear-gradient(90deg, #FF6B9D, #FF8EC7); }
+
+        .progress-text {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-lighter);
+            min-width: 30px;
+        }
+
+        /* Review Card - Full Width */
+        .review-card {
+            background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+            border-radius: var(--radius-xl);
+            padding: 24px;
+            margin: 0 20px 30px;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-md);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            animation: slideUp 0.5s ease 0.25s both;
+        }
+
+        .review-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+
+        .review-icon {
+            width: 56px; height: 56px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            backdrop-filter: blur(10px);
+        }
+
+        .review-info { flex: 1; }
+
+        .review-name {
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .review-desc {
+            color: rgba(255,255,255,0.8);
+            font-size: 12px;
+        }
+
+        .review-stats {
+            display: flex;
+            gap: 16px;
+            margin-top: 8px;
+        }
+
+        .review-stat {
+            color: rgba(255,255,255,0.9);
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Daily Tip */
+        .daily-tip {
+            background: linear-gradient(135deg, #FFF9E6, #FFF3CC);
+            border: 1px solid #FBBF24;
+            border-radius: var(--radius-lg);
+            padding: 16px 20px;
+            margin: 0 20px 30px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .daily-tip-icon { font-size: 20px; flex-shrink: 0; }
+
+        .daily-tip-text {
+            font-size: 13px;
+            color: var(--text-medium);
+            line-height: 1.6;
+        }
+
+        .daily-tip-text strong { color: #D97706; }
+
+        /* ===== Module Detail Page ===== */
+        .detail-page { padding-bottom: 100px; }
+
+        .detail-hero {
+            padding: 30px 24px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .detail-hero.reading-hero { background: linear-gradient(135deg, #5B7FFF, #8BA4FF); }
+        .detail-hero.listening-hero { background: linear-gradient(135deg, #4ECDC4, #44B09E); }
+        .detail-hero.writing-hero { background: linear-gradient(135deg, #FF8C42, #FFA07A); }
+        .detail-hero.speaking-hero { background: linear-gradient(135deg, #FF6B9D, #FF8EC7); }
+        .detail-hero.review-hero { background: linear-gradient(135deg, #667EEA, #764BA2); }
+
+        .back-btn {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover { background: rgba(255,255,255,0.3); }
+
+        .detail-icon { font-size: 48px; margin-bottom: 12px; }
+
+        .detail-title {
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .detail-quote {
+            color: rgba(255,255,255,0.9);
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 14px;
+            font-style: italic;
+            line-height: 1.6;
+            max-width: 350px;
+            margin: 0 auto;
+        }
+
+        .detail-quote-author {
+            color: rgba(255,255,255,0.7);
+            font-size: 12px;
+            margin-top: 6px;
+            font-style: normal;
+        }
+
+        /* Start Learning Button */
+        .start-btn-wrapper { text-align: center; margin: -22px 20px 24px; position: relative; z-index: 10; }
+
+        .start-btn {
+            background: var(--bg-white);
+            border: none;
+            padding: 14px 40px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary);
+            cursor: pointer;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .start-btn .arrow { transition: transform 0.3s; }
+        .start-btn:hover .arrow { transform: translateX(4px); }
+
+        /* Feature Cards */
+        .feature-list {
+            padding: 0 20px;
+            margin-bottom: 24px;
+        }
+
+        .feature-card {
+            background: var(--bg-white);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow-sm);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .feature-card:hover {
+            transform: translateX(4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .feature-icon {
+            width: 44px; height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .feature-info { flex: 1; }
+
+        .feature-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 2px;
+        }
+
+        .feature-desc {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        .feature-arrow {
+            color: var(--text-lighter);
+            font-size: 18px;
+        }
+
+        /* ===== Content Pages (Vocab, Reading, etc.) ===== */
+        .content-page { padding-bottom: 100px; }
+
+        .content-header {
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--bg-white);
+            border-bottom: 1px solid #F0F0F0;
+        }
+
+        .content-back {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--text-dark);
+            padding: 4px;
+        }
+
+        .content-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        /* Vocab Card */
+        .vocab-container { padding: 20px; }
+
+        .vocab-card {
+            background: var(--bg-white);
+            border-radius: var(--radius-xl);
+            padding: 30px 24px;
+            box-shadow: var(--shadow-md);
+            text-align: center;
+            margin-bottom: 20px;
+            min-height: 240px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .vocab-word {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .vocab-phonetic {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 16px;
+        }
+
+        .vocab-meaning {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .vocab-example {
+            font-size: 13px;
+            color: var(--text-medium);
+            line-height: 1.6;
+            font-style: italic;
+            max-width: 300px;
+        }
+
+        .vocab-nav {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .vocab-nav-btn {
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .vocab-nav-btn.prev { background: #F0F0F0; color: var(--text-medium); }
+        .vocab-nav-btn.prev:hover { background: #E0E0E0; }
+        .vocab-nav-btn.know { background: #E6FAF8; color: #4ECDC4; }
+        .vocab-nav-btn.know:hover { background: #D0F5F0; }
+        .vocab-nav-btn.unknown { background: #FFE6EF; color: #FF6B9D; }
+        .vocab-nav-btn.unknown:hover { background: #FFCCD9; }
+        .vocab-nav-btn.next { background: var(--primary); color: white; }
+        .vocab-nav-btn.next:hover { background: var(--primary-dark); }
+
+        .vocab-counter {
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-light);
+            margin-bottom: 16px;
+        }
+
+        /* Reading Passage */
+        .reading-passage {
+            background: var(--bg-white);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .passage-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+        }
+
+        .passage-text {
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--text-medium);
+        }
+
+        .passage-text .highlight {
+            background: #FFF9E6;
+            padding: 1px 4px;
+            border-radius: 3px;
+        }
+
+        /* Questions */
+        .question-section { padding: 0 20px 20px; }
+
+        .question-card {
+            background: var(--bg-white);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .question-number {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .question-text {
+            font-size: 14px;
+            color: var(--text-dark);
+            margin-bottom: 14px;
+            line-height: 1.6;
+        }
+
+        .option-list { list-style: none; }
+
+        .option-item {
+            padding: 12px 16px;
+            border: 2px solid #F0F0F0;
+            border-radius: var(--radius-md);
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 13px;
+            color: var(--text-medium);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .option-item:hover { border-color: var(--primary-light); background: #F8F9FF; }
+        .option-item.selected { border-color: var(--primary); background: #EBF0FF; color: var(--primary); font-weight: 600; }
+        .option-item.correct { border-color: #4ECDC4; background: #E6FAF8; color: #44B09E; font-weight: 600; }
+        .option-item.wrong { border-color: #FF6B9D; background: #FFE6EF; color: #FF6B9D; }
+
+        .option-letter {
+            width: 24px; height: 24px;
+            border-radius: 50%;
+            background: #F0F0F0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .option-item.selected .option-letter { background: var(--primary); color: white; }
+        .option-item.correct .option-letter { background: #4ECDC4; color: white; }
+        .option-item.wrong .option-letter { background: #FF6B9D; color: white; }
+
+        .submit-answer-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 8px;
+        }
+
+        .submit-answer-btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
+
+        .answer-feedback {
+            margin-top: 12px;
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            font-size: 13px;
+            line-height: 1.6;
+            display: none;
+        }
+
+        .answer-feedback.correct-fb { background: #E6FAF8; color: #44B09E; display: block; }
+        .answer-feedback.wrong-fb { background: #FFE6EF; color: #E0457A; display: block; }
+
+        /* Listening */
+        .listening-player {
+            background: var(--bg-white);
+            border-radius: var(--radius-xl);
+            padding: 30px 24px;
+            margin: 20px;
+            box-shadow: var(--shadow-md);
+            text-align: center;
+        }
+
+        .audio-visual {
+            width: 100%;
+            height: 80px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+        }
+
+        .audio-bar {
+            width: 4px;
+            background: var(--primary-light);
+            border-radius: 2px;
+            transition: height 0.2s;
+            opacity: 0.5;
+        }
+
+        .audio-bar.active { opacity: 1; animation: audioWave 0.5s ease infinite alternate; }
+
+        @keyframes audioWave {
+            from { height: 10px; }
+            to { height: 60px; }
+        }
+
+        .play-btn {
+            width: 64px; height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: var(--transition);
+            margin: 0 auto 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(91, 127, 255, 0.4);
+        }
+
+        .play-btn:hover { transform: scale(1.05); }
+
+        .audio-speed {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .speed-btn {
+            padding: 4px 12px;
+            border-radius: 12px;
+            border: 1px solid #E0E0E0;
+            background: white;
+            font-size: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-light);
+        }
+
+        .speed-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+        .transcript-card {
+            background: var(--bg-white);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin: 0 20px 16px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .transcript-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .transcript-text {
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--text-medium);
+        }
+
+        .transcript-text .key-sentence {
+            background: #FFF9E6;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        /* Writing */
+        .writing-prompt {
+            background: var(--bg-white);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .prompt-tag {
+            display: inline-block;
+            padding: 3px 10px;
+            background: #FFF0E6;
+            color: var(--accent-orange);
+            font-size: 11px;
+            font-weight: 600;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .prompt-text {
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--text-dark);
+        }
+
+        .word-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 0 20px;
+            margin-bottom: 16px;
+        }
+
+        .word-chip {
+            background: #EBF0FF;
+            color: var(--primary);
+            padding: 6px 14px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .word-chip:hover { background: var(--primary); color: white; }
+
+        .writing-area {
+            margin: 0 20px;
+        }
+
+        .writing-textarea {
+            width: 100%;
+            min-height: 200px;
+            border: 2px solid #F0F0F0;
+            border-radius: var(--radius-lg);
+            padding: 16px;
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--text-dark);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            resize: vertical;
+            transition: var(--transition);
+        }
+
+        .writing-textarea:focus { outline: none; border-color: var(--primary-light); }
+
+        .writing-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+        }
+
+        .word-count {
+            font-size: 12px;
+            color: var(--text-lighter);
+        }
+
+        .score-btn {
+            background: linear-gradient(135deg, var(--accent-orange), #FFA07A);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .score-btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
+
+        .score-result {
+            background: var(--bg-white);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin: 16px 20px;
+            box-shadow: var(--shadow-sm);
+            display: none;
+        }
+
+        .score-result.show { display: block; animation: scaleIn 0.3s ease; }
+
+        .score-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .score-circle {
+            width: 72px; height: 72px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-orange), #FFA07A);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .score-breakdown { flex: 1; }
+
+        .score-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+            font-size: 12px;
+        }
+
+        .score-item-label { color: var(--text-light); min-width: 60px; }
+
+        .score-item-bar {
+            flex: 1;
+            height: 6px;
+            background: #F0F0F0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .score-item-fill {
+            height: 100%;
+            background: var(--accent-orange);
+            border-radius: 3px;
+            transition: width 0.8s ease;
+        }
+
+        .score-item-value { font-weight: 600; color: var(--text-dark); min-width: 20px; }
+
+        .score-feedback {
+            font-size: 13px;
+            line-height: 1.7;
+            color: var(--text-medium);
+            padding-top: 12px;
+            border-top: 1px solid #F0F0F0;
+        }
+
+        /* Speaking */
+        .speaking-practice {
+            background: var(--bg-white);
+            border-radius: var(--radius-xl);
+            padding: 30px 24px;
+            margin: 20px;
+            box-shadow: var(--shadow-md);
+            text-align: center;
+        }
+
+        .topic-card {
+            background: linear-gradient(135deg, #FFE6EF, #FFCCD9);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .topic-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #E0457A;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .topic-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: #C0305F;
+            line-height: 1.6;
+        }
+
+        .record-btn {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FF6B9D, #FF8EC7);
+            border: none;
+            color: white;
+            font-size: 32px;
+            cursor: pointer;
+            transition: var(--transition);
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(255, 107, 157, 0.4);
+            position: relative;
+        }
+
+        .record-btn:hover { transform: scale(1.05); }
+
+        .record-btn.recording {
+            animation: pulse 1s ease infinite;
+            box-shadow: 0 4px 30px rgba(255, 107, 157, 0.6);
+        }
+
+        .record-btn.recording::after {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 107, 157, 0.4);
+            animation: pulse 1s ease infinite;
+        }
+
+        .record-hint {
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        .ai-score-card {
+            background: #F8F9FF;
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-top: 20px;
+            text-align: left;
+            display: none;
+        }
+
+        .ai-score-card.show { display: block; animation: scaleIn 0.3s ease; }
+
+        .ai-score-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .ai-criteria {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .criteria-item {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: 12px;
+            text-align: center;
+        }
+
+        .criteria-name {
+            font-size: 11px;
+            color: var(--text-light);
+            margin-bottom: 4px;
+        }
+
+        .criteria-score {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .criteria-max {
+            font-size: 11px;
+            color: var(--text-lighter);
+        }
+
+        .ai-suggestion {
+            font-size: 12px;
+            line-height: 1.6;
+            color: var(--text-medium);
+            padding-top: 10px;
+            border-top: 1px solid #E0E0F0;
+        }
+
+        /* Review Module */
+        .review-tabs {
+            display: flex;
+            background: var(--bg-white);
+            padding: 4px;
+            margin: 20px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .review-tab {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: none;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-light);
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+        }
+
+        .review-tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .review-list { padding: 0 20px; }
+
+        .review-item {
+            background: var(--bg-white);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            margin-bottom: 10px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .review-item-icon {
+            width: 36px; height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .review-item-icon.word { background: #EBF0FF; }
+        .review-item-icon.error { background: #FFE6EF; }
+
+        .review-item-info { flex: 1; }
+
+        .review-item-main {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .review-item-sub {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 2px;
+        }
+
+        .review-item-action {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: var(--text-lighter);
+            padding: 4px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-lighter);
+        }
+
+        .empty-state-icon { font-size: 48px; margin-bottom: 12px; }
+        .empty-state-text { font-size: 14px; }
+
+        /* ===== Bottom Nav ===== */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-white);
+            display: flex;
+            padding: 8px 0;
+            padding-bottom: max(8px, env(safe-area-inset-bottom));
+            box-shadow: 0 -2px 12px rgba(0,0,0,0.06);
+            z-index: 100;
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            padding: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            background: none;
+        }
+
+        .nav-icon { font-size: 22px; }
+        .nav-label { font-size: 10px; font-weight: 500; color: var(--text-light); }
+        .nav-item.active .nav-label { color: var(--primary); font-weight: 600; }
+
+        /* ===== Good Words Section ===== */
+        .good-words-section { padding: 0 20px 20px; }
+
+        .good-word-card {
+            background: var(--bg-white);
+            border-radius: var(--radius-lg);
+            padding: 16px 20px;
+            margin-bottom: 10px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            transition: var(--transition);
+        }
+
+        .good-word-card:hover { box-shadow: var(--shadow-md); }
+
+        .gw-word {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--accent-orange);
+            min-width: 120px;
+        }
+
+        .gw-meaning {
+            font-size: 13px;
+            color: var(--text-medium);
+            flex: 1;
+        }
+
+        .gw-example-toggle {
+            background: #FFF0E6;
+            border: none;
+            color: var(--accent-orange);
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .gw-example {
+            display: none;
+            padding: 10px 0 0;
+            font-size: 12px;
+            color: var(--text-light);
+            font-style: italic;
+            line-height: 1.6;
+            border-top: 1px dashed #E0E0E0;
+            margin-top: 8px;
+        }
+
+        .gw-example.show { display: block; }
+
+        /* ===== Responsive ===== */
+        @media (min-width: 768px) {
+            .module-grid { grid-template-columns: repeat(4, 1fr); max-width: 800px; margin: 0 auto 24px; }
+            .stats-row { justify-content: center; }
+            .review-card { max-width: 800px; margin-left: auto; margin-right: auto; }
+            .section-title { max-width: 800px; margin-left: auto; margin-right: auto; }
+            .daily-tip { max-width: 800px; margin-left: auto; margin-right: auto; }
+            .home-hero { padding: 50px 24px 70px; }
+            .hero-title { font-size: 40px; }
+        }
+
+        /* ===== Toast ===== */
+        .toast {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            background: var(--text-dark);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 13px;
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ===== Modal ===== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 200;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.show { display: flex; }
+
+        .modal-content {
+            background: var(--bg-white);
+            border-radius: var(--radius-xl);
+            padding: 30px 24px;
+            max-width: 400px;
+            width: 100%;
+            animation: scaleIn 0.3s ease;
+            text-align: center;
+        }
+
+        .modal-icon { font-size: 48px; margin-bottom: 12px; }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .modal-text {
+            font-size: 13px;
+            color: var(--text-medium);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .modal-btn {
+            padding: 10px 32px;
+            border-radius: 20px;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .modal-btn.primary { background: var(--primary); color: white; }
+        .modal-btn.primary:hover { background: var(--primary-dark); }
+
+        /* ===== IELTS Tips Section ===== */
+        .tips-section { padding: 0 20px 20px; }
+
+        .tip-card {
+            background: var(--bg-white);
+            border-radius: var(--radius-lg);
+            padding: 16px 20px;
+            margin-bottom: 10px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .tip-num {
+            width: 28px; height: 28px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .tip-text {
+            font-size: 13px;
+            color: var(--text-medium);
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- ===== HOME PAGE ===== -->
+<div class="page active" id="homePage">
+    <header class="app-header">
+        <div class="header-left" onclick="navigateTo('home')">
+            <div class="header-logo">🎓</div>
+            <div>
+                <div class="header-title">IELTS Master</div>
+                <div class="header-subtitle">雅思学习助手</div>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="streak-badge">🔥 <span id="streakCount">3</span>天连续</div>
+        </div>
+    </header>
+
+    <div class="home-hero">
+        <div class="hero-greeting" id="greeting">晚上好，同学 👋</div>
+        <div class="hero-title">IELTS Master</div>
+        <div class="hero-quote">"The expert in anything was once a beginner."</div>
+    </div>
+
+    <div class="stats-row">
+        <div class="stat-card">
+            <div class="stat-number" id="wordsLearned">42</div>
+            <div class="stat-label">已学单词</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="questionsDone">18</div>
+            <div class="stat-label">完成题目</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="studyMinutes">76</div>
+            <div class="stat-label">学习分钟</div>
+        </div>
+    </div>
+
+    <div class="section-title">📚 四大模块</div>
+    <div class="module-grid">
+        <div class="module-card reading" onclick="navigateTo('reading')">
+            <div class="module-icon">📖</div>
+            <div class="module-name">阅读 Reading</div>
+            <div class="module-desc">单词背诵 · 阅读理解 · 技巧训练</div>
+            <div class="module-progress">
+                <div class="progress-bar"><div class="progress-fill" style="width: 35%"></div></div>
+                <div class="progress-text">35%</div>
+            </div>
+        </div>
+        <div class="module-card listening" onclick="navigateTo('listening')">
+            <div class="module-icon">🎧</div>
+            <div class="module-name">听力 Listening</div>
+            <div class="module-desc">语料精听 · 场景训练 · 解题技巧</div>
+            <div class="module-progress">
+                <div class="progress-bar"><div class="progress-fill" style="width: 28%"></div></div>
+                <div class="progress-text">28%</div>
+            </div>
+        </div>
+        <div class="module-card writing" onclick="navigateTo('writing')">
+            <div class="module-icon">✍️</div>
+            <div class="module-name">写作 Writing</div>
+            <div class="module-desc">好词推荐 · 范文赏析 · AI判分</div>
+            <div class="module-progress">
+                <div class="progress-bar"><div class="progress-fill" style="width: 20%"></div></div>
+                <div class="progress-text">20%</div>
+            </div>
+        </div>
+        <div class="module-card speaking" onclick="navigateTo('speaking')">
+            <div class="module-icon">🗣️</div>
+            <div class="module-name">口语 Speaking</div>
+            <div class="module-desc">AI陪练 · 话题模拟 · 智能打分</div>
+            <div class="module-progress">
+                <div class="progress-bar"><div class="progress-fill" style="width: 15%"></div></div>
+                <div class="progress-text">15%</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="review-card" onclick="navigateTo('review')">
+        <div class="review-icon">📝</div>
+        <div class="review-info">
+            <div class="review-name">自主复习 Review</div>
+            <div class="review-desc">生词本 · 错题本 · 个性化巩固</div>
+            <div class="review-stats">
+                <div class="review-stat">📖 生词 <span id="reviewWordCount">12</span></div>
+                <div class="review-stat">❌ 错题 <span id="reviewErrorCount">5</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="daily-tip">
+        <div class="daily-tip-icon">💡</div>
+        <div class="daily-tip-text">
+            <strong>今日贴士：</strong>雅思阅读考试中，先读题目再读文章，带着问题找答案，效率提升 40%！
+        </div>
+    </div>
+</div>
+
+<!-- ===== READING MODULE PAGE ===== -->
+<div class="page" id="readingPage">
+    <div class="detail-page">
+        <div class="detail-hero reading-hero">
+            <button class="back-btn" onclick="navigateTo('home')">←</button>
+            <div class="detail-icon">📖</div>
+            <div class="detail-title">阅读 Reading</div>
+            <div class="detail-quote">"A reader lives a thousand lives before he dies. The man who never reads lives only one."</div>
+            <div class="detail-quote-author">— George R.R. Martin</div>
+        </div>
+
+        <div class="start-btn-wrapper">
+            <button class="start-btn" onclick="navigateTo('readingContent')">
+                开始学习 <span class="arrow">→</span>
+            </button>
+        </div>
+
+        <div class="feature-list">
+            <div class="feature-card" onclick="navigateTo('vocabPage')">
+                <div class="feature-icon" style="background:#EBF0FF;">🔤</div>
+                <div class="feature-info">
+                    <div class="feature-name">单词背诵</div>
+                    <div class="feature-desc">雅思高频词汇，分类记忆</div>
+                </div>
+                <div class="feature-arrow">›</div>
+            </div>
+            <div class="feature-card" onclick="navigateTo('readingQuiz')">
+                <div class="feature-icon" style="background:#E6FAF8;">📝</div>
+                <div class="feature-info">
+                    <div class="feature-name">阅读题目</div>
+                    <div class="feature-desc">真题模拟，解析详尽</div>
+                </div>
+                <div class="feature-arrow">›</div>
+            </div>
+            <div class="feature-card" onclick="showToast('阅读技巧即将上线！')">
+                <div class="feature-icon" style="background:#FFF9E6;">🎯</div>
+                <div class="feature-info">
+                    <div class="feature-name">阅读技巧</div>
+                    <div class="feature-desc">Matching / T/F/NG / 填空攻略</div>
+                </div>
+                <div class="feature-arrow">›</div>
+            </div>
+            <div class="feature-card" onclick="showToast('长难句分析即将上线！')">
+                <div class="feature-icon" style="background:#FFE6EF;">🔍</div>
+                <div class="feature-info">
+                    <div class="feature-name">长难句分析</div>
+                    <div class="feature-desc">拆解复杂句式，突破阅读瓶颈</div>
+                </div>
+                <div class="feature-arrow">›</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== VOCAB PAGE ===== -->
+<div class="page" id="vocabPage">
+    <div class="content-page">
+        <div class="content-header">
+            <button class="content-back" onclick="navigateTo('reading')">←</button>
+            <div class="content-title">单词背诵</div>
+        </div>
+        <div class="vocab-container">
+            <div class="vocab-counter" id="vocabCounter">1 / 10</div>
+            <div class="vocab-card" id="vocabCard">
+                <div class="vocab-word" id="vocabWord">elaborate</div>
+                <div class="vocab-phonetic" id="vocabPhonetic">/ɪˈlæbərət/</div>
+                <div class="vocab-meaning" id="vocabMeaning">adj. 精心制作的；详尽的</div>
+                <div class="vocab-example" id="vocabExample">"She made elaborate preparations for the party."</div>
+            </div>
+            <div class="vocab-nav">
+                <button class="vocab-nav-btn prev" onclick="prevVocab()">‹</button>
+                <button class="vocab-nav-btn unknown" onclick="markVocab(false)">😕 不认识</button>
+                <button class="vocab-nav-btn know" onclick="markVocab(true)">👍 认识</button>
+                <button class="vocab-nav-btn next" onclick="nextVocab()">›</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== READING QUIZ PAGE ===== -->
+<div class="page" id="readingQuizPage">
+    <div class="content-page">
+        <div class="content-header">
+            <button class="content-back" onclick="navigateTo('reading')">←</button>
+            <div class="content-title">阅读理解</div>
+        </div>
+        <div class="reading-passage">
+            <div class="passage-title">🌍 The Impact of Artificial Intelligence on Education</div>
+            <div class="passage-text">
+                Artificial intelligence (AI) is rapidly transforming the landscape of education worldwide. 
+                <span class="highlight">Personalized learning systems</span>, powered by sophisticated algorithms, can now adapt 
+                to individual students' needs, pace, and learning styles. According to a recent study by the 
+                World Economic Forum, AI-driven educational tools have shown a <span class="highlight">30% improvement</span> 
+                in student engagement compared to traditional methods.<br><br>
+                However, critics argue that over-reliance on AI may diminish the role of human teachers, 
+                who provide emotional support and mentorship that machines cannot replicate. 
+                The challenge lies in finding a <span class="highlight">balanced approach</span> that leverages 
+                technology while preserving the human element in education.
+            </div>
+        </div>
+        <div class="question-section" id="questionSection">
+            <!-- Questions will be populated by JS -->
+        </div>
+    </div>
+</div>
+
+<!-- ===== READING CONTENT PAGE ===== -->
+<div class="page" id="readingContentPage">
+    <div class="content-page">
+        <div class="content-header">
+            <button class="content-back" onclick="navigateTo('reading')">←</button>
+            <div class="content-title">阅读学习</div>
+        </div>
+        <div class="feature-list">
+            <div class="feature-card" onclick="navigateTo('vocabPage')">
+                <div class="feature-icon" style="background:#EBF0FF;">🔤</div>
+                <div class="feature-info">
+                    <div class="feature-name">单词背诵</div>
+                    <div class="feature-desc">今日新词 10 个，复习 15 个</div>
+                </div>
+                <div class="feature-arrow">›</div>
+            </div>
+            <div class="feature-card" onclick="navigateTo('readingQuiz')">
+                <div class="feature-icon" style="background:#E6FAF8;">📝</div>
+                <div class="feature-info">
+                    <div class="feature-name">阅读题目</div>
+                    <div class="feature-desc">今日推荐：AI与教育</div>
+                </div>
+                <div class="feature-arrow">›</div>
+            </div>
+            <div class="feature-card" onclick="showToast('同义替换即将上线！')">
+                <div class="feature-icon" style="background:#FFF9E6;">🔄</div>
+                <div class="feature-info">
+                    <div class="feature-name">同义替换</div>
+                    <div class="feature-desc">雅思阅读核心技能训练</div>
+                </div>
+                <div class="feature-arrow">›</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== LISTENING MODULE PAGE ===== -->
+<div class="page" id="listeningPage">
+    <div class="detail-page">
+        <div class="detail-hero listening-hero">
+            <button class="back-btn" onclick="navigateTo('home')">←</button>
+            <div class="detail-icon">🎧</div>
+            <div class="detail-title">听力 Listening</div>
+            <div class="detail-quote">"The ear is the avenue to the heart."</div>
+            <div class="detail-quote-author">— Voltaire</div>
+        </div>
+
+        <div class="start-btn-wrapper">
+            <button class="start-btn" onclick="navigateTo('listeningContent')">
+                开始学习 <span class="arrow">→</span>
+            </button>
+        </div>
+
+        <div class="feature-list">
+            <div class="feature-card" onclick="navigateTo('listeningContent')">
+                <div class="feature-icon" style="background:#E6FAF8;">🎵</div>
+                <div class="feature-info">
+                    <div class="feature-name">语料精听</div>
+                    <div class="feature-desc">场景词汇 · 连读弱读 · 精听训练</div>
+                </div>
+                <div class="feature-arrow">›</div>
+            </div>
+            <div class="feature-card" onclick="showToast('听力模拟题即将上线！')">
+                <div class="feature-icon" style="background:#EBF0FF;">📋</div>
+                <div class="feature-info">
+                    <div class="feature-name">听力模拟</div>
+                    <div class="feature-desc">Section 1-4 全真模拟</div>
+                </div>
+                <div class="feature-arrow">›</div>
+            </div>
+            <div class="feature-card" onclick="showToast('填空专项即将上线！')">
+                <div class="feature-icon" style="background:#FFF9E6;">✏️</div>
+                <div class="feature-info">
+                    <div class="feature-name">填空专项</div>
+                    <div class="feature-desc">拼写 · 数字 · 地址训练</div>
+                </div>
+                <div class="feature-arrow">›</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== LISTENING CONTENT PAGE ===== -->
+<div class="page" id="listeningContentPage">
+    <div class="content-page">
+        <div class="content-header">
+            <button class="content-back" onclick="navigateTo('listening')">←</button>
+            <div class="content-title">语料精听</div>
+        </div>
+
+        <div class="listening-player">
+            <div class="audio-visual" id="audioVisual">
+                <!-- Audio bars generated by JS -->
+            </div>
+            <button class="play-btn" id="playBtn" onclick="togglePlay()">▶</button>
+            <div style="font-size:13px;color:var(--text-light);margin-bottom:8px;" id="audioStatus">点击播放听力材料</div>
+            <div class="audio-speed">
+                <button class="speed-btn" onclick="setSpeed(0.75, this)">0.75x</button>
+                <button class="speed-btn active" onclick="setSpeed(1, this)">1x</button>
+                <button class="speed-btn" onclick="setSpeed(1.25, this)">1.25x</button>
+                <button class="speed-btn" onclick="setSpeed(1.5, this)">1.5x</button>
+            </div>
+        </div>
+
+        <div class="transcript-card">
+            <div class="transcript-label">📝 听力原文</div>
+            <div class="transcript-text" id="transcriptText">
+                Welcome to the university library orientation. I'm Sarah, the head librarian, and I'll be showing you around today.<br><br>
+                First, let me tell you about our <span class="key-sentence">opening hours</span>. During term time, we're open from <span class="key-sentence">8:00 AM to 10:00 PM</span> on weekdays, and <span class="key-sentence">9:00 AM to 6:00 PM</span> on weekends. During vacation periods, we close earlier at <span class="key-sentence">5:00 PM</span> every day.<br><br>
+                Now, about borrowing. Undergraduate students can borrow up to <span class="key-sentence">12 books</span> at a time, while postgraduates have a limit of <span class="key-sentence">20 books</span>. The standard loan period is <span class="key-sentence">three weeks</span>, but you can renew online if no one else has reserved the book.
+            </div>
+        </div>
+
+        <div class="transcript-card" style="background:#F8F9FF;">
+            <div class="transcript-label">💡 答案解析</div>
+            <div class="transcript-text">
+                <strong>题型分析：</strong>这是典型的 Section 1 场景——校园介绍。<br><br>
+                <strong>考点提示：</strong><br>
+                • 时间/数字类信息会重复一遍，注意抓取<br>
+                • "up to" 是限定词，答案前的修饰语不要漏掉<br>
+                • 注意区分 undergraduate 和 postgraduate 的不同要求<br><br>
+                <strong>高频场景词：</strong>orientation, loan period, renew, reserve, overdue
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== WRITING MODULE PAGE ===== -->
+<div class="page" id="writingPage">
+    <div class="detail-page">
+        <div class="detail-hero writing-hero">
+            <button class="back-btn" onclick="navigateTo('home')">←</button>
+            <div class="detail-icon">✍️</div>
+            <div class="detail-title">写作 Writing</div>
+            <div class="detail-quote">"There is no greater agony than bearing an untold story inside you."</div>
+            <div class="detail-quote-author">— Maya Angelou</div>
+        </div>
+
+        <div class="start-btn-wrapper">
+            <button class="start-btn" onclick="navigateTo('writingContent')">
+                开始学习 <span class="arrow">→</span>
+            </button>
+        </div>
+
+        <div class="feature-list">
+            <div class="feature-card" onclick="navigateTo('writingContent')">
+                <div class="feature-icon" style="background:#FFF0E6;">⭐</div>
+                <div class="feature-info">
+                    <div class="feature-name">好词推荐</div>
+                    <div class="feature-desc">高分词汇 · 替换表达 · 万能句型</div>
+                </div>
+                <div class="feature-arrow">›</div>
+            </div>
+            <div class="feature-card" onclick="navigateTo('writingPractice')">
+                <div class="feature-icon" style="background:#EBF0FF;">✏️</div>
+                <div class="feature-info">
+                    <div class="feature-name">写作练习</div>
+                    <div class="feature-desc">实战写作 · AI智能判分</div>
+                </div>
+                <div class="feature-arrow">›</div>
+            </div>
+            <div class="feature-card" onclick="showToast('范文赏析即将上线！')">
+                <div class="feature-icon" style="background:#E6FAF8;">📚</div>
+                <div class="feature-info">
+                    <div class="feature-name">范文赏析</div>
+                    <div class="feature-desc">Band 7+ 范文 · 结构拆解</div>
+                </div>
+                <div class="feature-arrow">›</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== WRITING CONTENT (Good Words) PAGE ===== -->
+<div class="page" id="writingContentPage">
+    <div class="content-page">
+        <div class="content-header">
+            <button class="content-back" onclick="navigateTo('writing')">←</button>
+            <div class="content-title">好词推荐</div>
+        </div>
+
+        <div style="padding:0 20px 12px;font-size:13px;color:var(--text-light);">
+            ✨ 点击词汇查看例句，点击词标可添加到生词本
+        </div>
+
+        <div class="good-words-section" id="goodWordsSection">
+            <!-- Generated by JS -->
+        </div>
+    </div>
+</div>
+
+<!-- ===== WRITING PRACTICE PAGE ===== -->
+<div class="page" id="writingPracticePage">
+    <div class="content-page">
+        <div class="content-header">
+            <button class="content-back" onclick="navigateTo('writing')">←</button>
+            <div class="content-title">写作练习</div>
+        </div>
+
+        <div class="writing-prompt">
+            <div class="prompt-tag">Task 2</div>
+            <div class="prompt-text">
+                Some people think that artificial intelligence will replace teachers in the future. 
+                To what extent do you agree or disagree?
+            </div>
+        </div>
+
+        <div style="padding:0 20px 8px;font-size:12px;color:var(--text-light);">💡 推荐使用以下高分词汇：</div>
+        <div class="word-chips">
+            <span class="word-chip" onclick="insertWord('indispensable')">indispensable</span>
+            <span class="word-chip" onclick="insertWord('unprecedented')">unprecedented</span>
+            <span class="word-chip" onclick="insertWord('complement')">complement</span>
+            <span class="word-chip" onclick="insertWord('fostering')">fostering</span>
+            <span class="word-chip" onclick="insertWord('irreplaceable')">irreplaceable</span>
+        </div>
+
+        <div class="writing-area">
+            <textarea class="writing-textarea" id="writingTextarea" placeholder="在此开始你的写作..." oninput="updateWordCount()"></textarea>
+        </div>
+
+        <div class="writing-toolbar">
+            <div class="word-count">字数：<span id="wordCountNum">0</span> / 250</div>
+            <button class="score-btn" onclick="submitWriting()">🎯 智能判分</button>
+        </div>
+
+        <div class="score-result" id="writingScoreResult">
+            <div class="score-header">
+                <div class="score-circle" id="writingTotalScore">6.5</div>
+                <div class="score-breakdown">
+                    <div class="score-item">
+                        <div class="score-item-label">任务回应</div>
+                        <div class="score-item-bar"><div class="score-item-fill" id="taskFill" style="width:65%"></div></div>
+                        <div class="score-item-value" id="taskScore">6.5</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-item-label">连贯衔接</div>
+                        <div class="score-item-bar"><div class="score-item-fill" id="coherenceFill" style="width:70%"></div></div>
+                        <div class="score-item-value" id="coherenceScore">7.0</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-item-label">词汇丰富</div>
+                        <div class="score-item-bar"><div class="score-item-fill" id="lexicalFill" style="width:60%"></div></div>
+                        <div class="score-item-value" id="lexicalScore">6.0</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-item-label">语法多样</div>
+                        <div class="score-item-bar"><div class="score-item-fill" id="grammarFill" style="width:55%"></div></div>
+                        <div class="score-item-value" id="grammarScore">5.5</div>
+                    </div>
+                </div>
+            </div>
+            <div class="score-feedback" id="writingFeedback"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== SPEAKING MODULE PAGE ===== -->
+<div class="page" id="speakingPage">
+    <div class="detail-page">
+        <div class="detail-hero speaking-hero">
+            <button class="back-btn" onclick="navigateTo('home')">←</button>
+            <div class="detail-icon">🗣️</div>
+            <div class="detail-title">口语 Speaking</div>
+            <div class="detail-quote">"The limits of my language mean the limits of my world."</div>
+            <div class="detail-quote-author">— Ludwig Wittgenstein</div>
+        </div>
+
+        <div class="start-btn-wrapper">
+            <button class="start-btn" onclick="navigateTo('speakingPractice')">
+                开始学习 <span class="arrow">→</span>
+            </button>
+        </div>
+
+        <div class="feature-list">
+            <div class="feature-card" onclick="navigateTo('speakingPractice')">
+                <div class="feature-icon" style="background:#FFE6EF;">🎙️</div>
+                <div class="feature-info">
+                    <div class="feature-name">AI 陪练</div>
+                    <div class="feature-desc">实时对话 · 智能评分 · 发音纠正</div>
+                </div>
+                <div class="feature-arrow">›</div>
+            </div>
+            <div class="feature-card" onclick="showToast('话题库即将上线！')">
+                <div class="feature-icon" style="background:#EBF0FF;">📋</div>
+                <div class="feature-info">
+                    <div class="feature-name">话题库</div>
+                    <div class="feature-desc">当季口语话题 · Part 1-3 全覆盖</div>
+                </div>
+                <div class="feature-arrow">›</div>
+            </div>
+            <div class="feature-card" onclick="showToast('发音训练即将上线！')">
+                <div class="feature-icon" style="background:#E6FAF8;">🎯</div>
+                <div class="feature-info">
+                    <div class="feature-name">发音训练</div>
+                    <div class="feature-desc">音标纠正 · 连读弱读 · 语调训练</div>
+                </div>
+                <div class="feature-arrow">›</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== SPEAKING PRACTICE PAGE ===== -->
+<div class="page" id="speakingPracticePage">
+    <div class="content-page">
+        <div class="content-header">
+            <button class="content-back" onclick="navigateTo('speaking')">←</button>
+            <div class="content-title">AI 陪练</div>
+        </div>
+
+        <div class="speaking-practice">
+            <div class="topic-card">
+                <div class="topic-label">Part 2 话题卡</div>
+                <div class="topic-text">Describe a book that you recently read and would recommend to others.<br><br>You should say:<br>• What the book is about<br>• Why you decided to read it<br>• What you learned from it<br>• And explain why you would recommend it</div>
+            </div>
+
+            <button class="record-btn" id="recordBtn" onclick="toggleRecording()">🎙️</button>
+            <div class="record-hint" id="recordHint">点击按钮开始录音</div>
+
+            <div class="ai-score-card" id="speakingScoreCard">
+                <div class="ai-score-title">🤖 AI 评分结果</div>
+                <div class="ai-criteria">
+                    <div class="criteria-item">
+                        <div class="criteria-name">流利度</div>
+                        <div class="criteria-score" id="fluencyScore">7.0</div>
+                        <div class="criteria-max">/9.0</div>
+                    </div>
+                    <div class="criteria-item">
+                        <div class="criteria-name">词汇</div>
+                        <div class="criteria-score" id="vocabScore">6.5</div>
+                        <div class="criteria-max">/9.0</div>
+                    </div>
+                    <div class="criteria-item">
+                        <div class="criteria-name">语法</div>
+                        <div class="criteria-score" id="grammarSpkScore">6.0</div>
+                        <div class="criteria-max">/9.0</div>
+                    </div>
+                    <div class="criteria-item">
+                        <div class="criteria-name">发音</div>
+                        <div class="criteria-score" id="pronScore">6.5</div>
+                        <div class="criteria-max">/9.0</div>
+                    </div>
+                </div>
+                <div class="ai-suggestion" id="speakingSuggestion">
+                    💡 建议：尝试使用更多连接词（however, furthermore, in addition）来提升流利度和连贯性。注意 "recommend" 的发音 /ˌrekəˈmend/，重音在第三个音节。
+                </div>
+            </div>
+        </div>
+
+        <div class="tips-section">
+            <div style="font-size:15px;font-weight:700;padding:0 0 12px;color:var(--text-dark);">🎯 口语提分技巧</div>
+            <div class="tip-card">
+                <div class="tip-num">1</div>
+                <div class="tip-text">Part 2 说话要填满 2 分钟，准备好故事结构：开头 → 细节 → 感受</div>
+            </div>
+            <div class="tip-card">
+                <div class="tip-num">2</div>
+                <div class="tip-text">使用高级连接词：furthermore, nevertheless, in contrast 替代 but, and, so</div>
+            </div>
+            <div class="tip-card">
+                <div class="tip-num">3</div>
+                <div class="tip-text">遇到不会的词，用 "It's a kind of... that..." 来解释，比沉默好太多</div>
+            </div>
+            <div class="tip-card">
+                <div class="tip-num">4</div>
+                <div class="tip-text">录音回听自己的回答，这是发现语法错误和发音问题最有效的方法</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== REVIEW MODULE PAGE ===== -->
+<div class="page" id="reviewPage">
+    <div class="detail-page">
+        <div class="detail-hero review-hero">
+            <button class="back-btn" onclick="navigateTo('home')">←</button>
+            <div class="detail-icon">📝</div>
+            <div class="detail-title">自主复习 Review</div>
+            <div class="detail-quote">"Repetition is the mother of learning."</div>
+            <div class="detail-quote-author">— Latin Proverb</div>
+        </div>
+
+        <div class="review-tabs">
+            <button class="review-tab active" onclick="switchReviewTab('words', this)">📖 生词本</button>
+            <button class="review-tab" onclick="switchReviewTab('errors', this)">❌ 错题本</button>
+        </div>
+
+        <div id="reviewWordsList" class="review-list">
+            <!-- Generated by JS -->
+        </div>
+        <div id="reviewErrorsList" class="review-list" style="display:none;">
+            <!-- Generated by JS -->
+        </div>
+    </div>
+</div>
+
+<!-- ===== Bottom Navigation ===== -->
+<div class="bottom-nav" id="bottomNav">
+    <button class="nav-item active" onclick="navigateTo('home')">
+        <div class="nav-icon">🏠</div>
+        <div class="nav-label">首页</div>
+    </button>
+    <button class="nav-item" onclick="navigateTo('reading')">
+        <div class="nav-icon">📖</div>
+        <div class="nav-label">阅读</div>
+    </button>
+    <button class="nav-item" onclick="navigateTo('listening')">
+        <div class="nav-icon">🎧</div>
+        <div class="nav-label">听力</div>
+    </button>
+    <button class="nav-item" onclick="navigateTo('writing')">
+        <div class="nav-icon">✍️</div>
+        <div class="nav-label">写作</div>
+    </button>
+    <button class="nav-item" onclick="navigateTo('speaking')">
+        <div class="nav-icon">🗣️</div>
+        <div class="nav-label">口语</div>
+    </button>
+</div>
+
+<script>
+// ===== DATA =====
+const vocabData = [
+    { word: "elaborate", phonetic: "/ɪˈlæbərət/", meaning: "adj. 精心制作的；详尽的 v. 详述", example: "She made elaborate preparations for the party." },
+    { word: "unprecedented", phonetic: "/ʌnˈpresɪdentɪd/", meaning: "adj. 前所未有的，史无前例的", example: "The country is facing an unprecedented economic crisis." },
+    { word: "indispensable", phonetic: "/ˌɪndɪˈspensəbl/", meaning: "adj. 不可缺少的，必需的", example: "Computers have become indispensable in modern education." },
+    { word: "controversial", phonetic: "/ˌkɒntrəˈvɜːʃl/", meaning: "adj. 有争议的，引起争论的", example: "The new policy remains highly controversial among scholars." },
+    { word: "comprehensive", phonetic: "/ˌkɒmprɪˈhensɪv/", meaning: "adj. 全面的，综合的", example: "We need a comprehensive review of the entire system." },
+    { word: "deteriorate", phonetic: "/dɪˈtɪəriəreɪt/", meaning: "v. 恶化，变坏", example: "Air quality continues to deteriorate in urban areas." },
+    { word: "implement", phonetic: "/ˈɪmplɪment/", meaning: "v. 实施，执行 n. 工具", example: "The government plans to implement new environmental regulations." },
+    { word: "subsequent", phonetic: "/ˈsʌbsɪkwənt/", meaning: "adj. 随后的，后来的", example: "Subsequent research confirmed the initial findings." },
+    { word: "predominantly", phonetic: "/prɪˈdɒmɪnəntli/", meaning: "adv. 主要地，显著地", example: "The population is predominantly young professionals." },
+    { word: "fluctuate", phonetic: "/ˈflʌktʃueɪt/", meaning: "v. 波动，涨落", example: "Oil prices fluctuate dramatically in response to global events." }
+];
+
+const readingQuestions = [
+    {
+        number: "Question 1",
+        text: "According to the passage, AI-driven educational tools have shown what improvement in student engagement?",
+        options: ["20% improvement", "30% improvement", "40% improvement", "50% improvement"],
+        correct: 1,
+        explanation: "文中明确提到 'a 30% improvement in student engagement'，答案选B。"
+    },
+    {
+        number: "Question 2",
+        text: "What concern do critics raise about AI in education?",
+        options: [
+            "AI is too expensive to implement",
+            "AI may diminish the role of human teachers",
+            "AI cannot improve student engagement",
+            "AI is not suitable for personalized learning"
+        ],
+        correct: 1,
+        explanation: "文中指出 critics argue 'over-reliance on AI may diminish the role of human teachers'，答案选B。"
+    },
+    {
+        number: "Question 3",
+        text: "The phrase 'balanced approach' in the passage suggests that:",
+        options: [
+            "AI should completely replace teachers",
+            "Technology and human elements should work together",
+            "Traditional methods are better than AI",
+            "Only some subjects should use AI"
+        ],
+        correct: 1,
+        explanation: "'balanced approach' 意为平衡方法，结合上下文指 'leverages technology while preserving the human element'，选B。"
+    }
+];
+
+const goodWordsData = [
+    { word: "indispensable", meaning: "不可或缺的 → 替换 important/necessary", example: "Teachers play an indispensable role in fostering students' critical thinking." },
+    { word: "unprecedented", meaning: "史无前例的 → 替换 new/unheard-of", example: "Technology has brought about unprecedented changes to the way we learn." },
+    { word: "complement", meaning: "补充，使完美 → 替换 help/support", example: "AI tools can complement traditional teaching methods rather than replace them." },
+    { word: "fostering", meaning: "培养，促进 → 替换 developing/encouraging", example: "Schools should focus on fostering creativity and independent thinking." },
+    { word: "irreplaceable", meaning: "不可替代的 → 替换 essential/crucial", example: "The emotional support from teachers is irreplaceable in children's development." },
+    { word: "detrimental", meaning: "有害的 → 替换 harmful/bad", example: "Excessive screen time can be detrimental to students' eye health." },
+    { word: "alleviate", meaning: "缓解，减轻 → 替换 reduce/ease", example: "Technology can help alleviate the workload of teachers significantly." },
+    { word: "paradigm shift", meaning: "范式转变 → 替换 big change", example: "The integration of AI in education represents a paradigm shift in pedagogy." }
+];
+
+const wordBook = [
+    { word: "elaborate", meaning: "adj. 精心制作的" },
+    { word: "deteriorate", meaning: "v. 恶化，变坏" },
+    { word: "controversial", meaning: "adj. 有争议的" },
+    { word: "fluctuate", meaning: "v. 波动，涨落" },
+    { word: "subsequent", meaning: "adj. 随后的" },
+    { word: "predominantly", meaning: "adv. 主要地" }
+];
+
+const errorBook = [
+    { question: "AI educational tools improvement rate", yourAnswer: "40% improvement", correctAnswer: "30% improvement", module: "阅读" },
+    { question: "balanced approach 暗示什么", yourAnswer: "AI应完全替代老师", correctAnswer: "技术与人力应结合", module: "阅读" },
+    { question: "library opening hours - weekday close", yourAnswer: "9:00 PM", correctAnswer: "10:00 PM", module: "听力" },
+    { question: "undergraduate borrowing limit", yourAnswer: "15 books", correctAnswer: "12 books", module: "听力" },
+    { question: "implement 词性", yourAnswer: "仅作动词", correctAnswer: "动词/名词均可", module: "词汇" }
+];
+
+// ===== STATE =====
+let currentVocabIndex = 0;
+let isRecording = false;
+let isPlaying = false;
+let currentReviewTab = 'words';
+
+// ===== NAVIGATION =====
+function navigateTo(page) {
+    // Hide all pages
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    
+    // Show target page
+    const pageMap = {
+        'home': 'homePage',
+        'reading': 'readingPage',
+        'readingContent': 'readingContentPage',
+        'vocabPage': 'vocabPage',
+        'readingQuiz': 'readingQuizPage',
+        'listening': 'listeningPage',
+        'listeningContent': 'listeningContentPage',
+        'writing': 'writingPage',
+        'writingContent': 'writingContentPage',
+        'writingPractice': 'writingPracticePage',
+        'speaking': 'speakingPage',
+        'speakingPractice': 'speakingPracticePage',
+        'review': 'reviewPage'
+    };
+    
+    const targetId = pageMap[page];
+    if (targetId) {
+        document.getElementById(targetId).classList.add('active');
+    }
+    
+    // Update bottom nav
+    const navMap = { 'home': 0, 'reading': 1, 'listening': 2, 'writing': 3, 'speaking': 4 };
+    document.querySelectorAll('.nav-item').forEach((item, i) => {
+        item.classList.toggle('active', i === navMap[page]);
+    });
+    
+    // Show/hide bottom nav for detail pages
+    const showNav = ['home', 'reading', 'listening', 'writing', 'speaking'].includes(page);
+    document.getElementById('bottomNav').style.display = showNav ? 'flex' : 'none';
+    
+    // Initialize content
+    if (page === 'vocabPage') renderVocab();
+    if (page === 'readingQuiz') renderQuestions();
+    if (page === 'writingContent') renderGoodWords();
+    if (page === 'review') renderReviewLists();
+    if (page === 'listeningContent') initAudioVisual();
+    
+    window.scrollTo(0, 0);
+}
+
+// ===== TOAST =====
+function showToast(msg) {
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2000);
+}
+
+// ===== GREETING =====
+function updateGreeting() {
+    const hour = new Date().getHours();
+    let greeting = '';
+    if (hour < 6) greeting = '夜深了，注意休息 🌙';
+    else if (hour < 12) greeting = '早上好，同学 ☀️';
+    else if (hour < 18) greeting = '下午好，同学 🌤️';
+    else greeting = '晚上好，同学 🌙';
+    document.getElementById('greeting').textContent = greeting;
+}
+
+// ===== VOCAB =====
+function renderVocab() {
+    const v = vocabData[currentVocabIndex];
+    document.getElementById('vocabWord').textContent = v.word;
+    document.getElementById('vocabPhonetic').textContent = v.phonetic;
+    document.getElementById('vocabMeaning').textContent = v.meaning;
+    document.getElementById('vocabExample').textContent = `"${v.example}"`;
+    document.getElementById('vocabCounter').textContent = `${currentVocabIndex + 1} / ${vocabData.length}`;
+}
+
+function nextVocab() {
+    if (currentVocabIndex < vocabData.length - 1) {
+        currentVocabIndex++;
+        renderVocab();
+    } else {
+        showToast('🎉 今日新词已学完！');
+    }
+}
+
+function prevVocab() {
+    if (currentVocabIndex > 0) {
+        currentVocabIndex--;
+        renderVocab();
+    }
+}
+
+function markVocab(known) {
+    if (!known) {
+        // Add to word book
+        const v = vocabData[currentVocabIndex];
+        if (!wordBook.find(w => w.word === v.word)) {
+            wordBook.push({ word: v.word, meaning: v.meaning.split('→')[0] || v.meaning });
+            document.getElementById('reviewWordCount').textContent = wordBook.length;
+            showToast('📕 已加入生词本');
+        }
+    } else {
+        showToast('👍 很棒，继续保持！');
+    }
+    nextVocab();
+}
+
+// ===== READING QUIZ =====
+function renderQuestions() {
+    const container = document.getElementById('questionSection');
+    container.innerHTML = '';
+    
+    readingQuestions.forEach((q, qi) => {
+        let optionsHtml = q.options.map((opt, oi) => 
+            `<div class="option-item" onclick="selectOption(${qi}, ${oi})" id="q${qi}o${oi}">
+                <div class="option-letter">${String.fromCharCode(65 + oi)}</div>
+                <div>${opt}</div>
+            </div>`
+        ).join('');
+        
+        container.innerHTML += `
+            <div class="question-card" id="question${qi}">
+                <div class="question-number">${q.number}</div>
+                <div class="question-text">${q.text}</div>
+                <div class="option-list">${optionsHtml}</div>
+                <div class="answer-feedback" id="feedback${qi}"></div>
+            </div>
+        `;
+    });
+    
+    container.innerHTML += `<button class="submit-answer-btn" onclick="submitAllAnswers()">提交全部答案</button>`;
+}
+
+let selectedAnswers = {};
+
+function selectOption(qi, oi) {
+    // Clear previous selection for this question
+    for (let i = 0; i < 4; i++) {
+        const el = document.getElementById(`q${qi}o${i}`);
+        if (el) el.className = 'option-item';
+    }
+    document.getElementById(`q${qi}o${oi}`).classList.add('selected');
+    selectedAnswers[qi] = oi;
+}
+
+function submitAllAnswers() {
+    let correct = 0;
+    readingQuestions.forEach((q, qi) => {
+        const selected = selectedAnswers[qi];
+        const feedback = document.getElementById(`feedback${qi}`);
+        
+        if (selected === undefined) {
+            feedback.className = 'answer-feedback wrong-fb';
+            feedback.textContent = '⚠️ 未作答。' + q.explanation;
+            return;
+        }
+        
+        // Mark correct/wrong
+        for (let i = 0; i < 4; i++) {
+            const el = document.getElementById(`q${qi}o${i}`);
+            el.style.pointerEvents = 'none';
+            if (i === q.correct) el.className = 'option-item correct';
+            else if (i === selected && selected !== q.correct) el.className = 'option-item wrong';
+        }
+        
+        if (selected === q.correct) {
+            correct++;
+            feedback.className = 'answer-feedback correct-fb';
+            feedback.textContent = '✅ 正确！' + q.explanation;
+        } else {
+            feedback.className = 'answer-feedback wrong-fb';
+            feedback.textContent = '❌ 错误。' + q.explanation;
+            
+            // Add to error book
+            errorBook.push({
+                question: q.text.substring(0, 30) + '...',
+                yourAnswer: q.options[selected],
+                correctAnswer: q.options[q.correct],
+                module: '阅读'
+            });
+            document.getElementById('reviewErrorCount').textContent = errorBook.length;
+        }
+    });
+    
+    showToast(`得分：${correct}/${readingQuestions.length}`);
+}
+
+// ===== LISTENING =====
+function initAudioVisual() {
+    const container = document.getElementById('audioVisual');
+    container.innerHTML = '';
+    for (let i = 0; i < 40; i++) {
+        const bar = document.createElement('div');
+        bar.className = 'audio-bar';
+        bar.style.height = Math.random() * 30 + 10 + 'px';
+        container.appendChild(bar);
+    }
+}
+
+function togglePlay() {
+    isPlaying = !isPlaying;
+    const btn = document.getElementById('playBtn');
+    const status = document.getElementById('audioStatus');
+    
+    if (isPlaying) {
+        btn.textContent = '⏸';
+        status.textContent = '正在播放... (模拟)';
+        // Animate bars
+        document.querySelectorAll('.audio-bar').forEach(bar => {
+            bar.classList.add('active');
+            bar.style.animationDelay = Math.random() * 0.5 + 's';
+        });
+        // Auto stop after 5s (demo)
+        setTimeout(() => {
+            if (isPlaying) togglePlay();
+        }, 5000);
+    } else {
+        btn.textContent = '▶';
+        status.textContent = '点击播放听力材料';
+        document.querySelectorAll('.audio-bar').forEach(bar => {
+            bar.classList.remove('active');
+            bar.style.height = Math.random() * 30 + 10 + 'px';
+        });
+    }
+}
+
+function setSpeed(speed, el) {
+    document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    showToast(`播放速度：${speed}x`);
+}
+
+// ===== WRITING =====
+function renderGoodWords() {
+    const container = document.getElementById('goodWordsSection');
+    container.innerHTML = goodWordsData.map((gw, i) => `
+        <div class="good-word-card">
+            <div style="flex:1;">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                    <div class="gw-word">${gw.word}</div>
+                    <button class="gw-example-toggle" onclick="toggleGwExample(${i})">例句</button>
+                </div>
+                <div class="gw-meaning">${gw.meaning}</div>
+                <div class="gw-example" id="gwExample${i}">${gw.example}</div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function toggleGwExample(index) {
+    const el = document.getElementById(`gwExample${index}`);
+    el.classList.toggle('show');
+}
+
+function updateWordCount() {
+    const text = document.getElementById('writingTextarea').value.trim();
+    const count = text ? text.split(/\s+/).length : 0;
+    document.getElementById('wordCountNum').textContent = count;
+}
+
+function insertWord(word) {
+    const textarea = document.getElementById('writingTextarea');
+    const pos = textarea.selectionStart;
+    const text = textarea.value;
+    textarea.value = text.substring(0, pos) + word + ' ' + text.substring(pos);
+    textarea.focus();
+    updateWordCount();
+}
+
+function submitWriting() {
+    const text = document.getElementById('writingTextarea').value.trim();
+    const wordCount = text ? text.split(/\s+/).length : 0;
+    
+    if (wordCount < 20) {
+        showToast('✏️ 请至少写 20 个单词再提交');
+        return;
+    }
+    
+    // Simulate AI scoring
+    const taskScore = (5.5 + Math.random() * 2).toFixed(1);
+    const coherenceScore = (5.5 + Math.random() * 2).toFixed(1);
+    const lexicalScore = (5.0 + Math.random() * 2.5).toFixed(1);
+    const grammarScore = (5.0 + Math.random() * 2.5).toFixed(1);
+    const totalScore = ((parseFloat(taskScore) + parseFloat(coherenceScore) + parseFloat(lexicalScore) + parseFloat(grammarScore)) / 4).toFixed(1);
+    
+    document.getElementById('writingTotalScore').textContent = totalScore;
+    document.getElementById('taskScore').textContent = taskScore;
+    document.getElementById('taskFill').style.width = (taskScore / 9 * 100) + '%';
+    document.getElementById('coherenceScore').textContent = coherenceScore;
+    document.getElementById('coherenceFill').style.width = (coherenceScore / 9 * 100) + '%';
+    document.getElementById('lexicalScore').textContent = lexicalScore;
+    document.getElementById('lexicalFill').style.width = (lexicalScore / 9 * 100) + '%';
+    document.getElementById('grammarScore').textContent = grammarScore;
+    document.getElementById('grammarFill').style.width = (grammarScore / 9 * 100) + '%';
+    
+    const feedbacks = [
+        `📊 综合评分 ${totalScore}。你的文章结构较为清晰，但部分段落之间的过渡需要更自然的连接词。建议多使用 "Furthermore", "In contrast" 等过渡语。词汇方面可以更丰富，尝试使用更高阶的替换表达。字数 ${wordCount} 字，${wordCount >= 250 ? '达到要求 ✓' : '未达到 250 字要求，建议补充更多论据 ✗'}。`,
+        `📊 综合评分 ${totalScore}。论点表达明确，但在论证深度上还有提升空间。建议对每个论点展开更多分析和举例。语法多样性可以增加，尝试使用更多复合句和从句结构。字数 ${wordCount} 字，${wordCount >= 250 ? '达到要求 ✓' : '未达到 250 字要求 ✗'}。`
+    ];
+    
+    document.getElementById('writingFeedback').textContent = feedbacks[Math.floor(Math.random() * feedbacks.length)];
+    document.getElementById('writingScoreResult').classList.add('show');
+}
+
+// ===== SPEAKING =====
+function toggleRecording() {
+    isRecording = !isRecording;
+    const btn = document.getElementById('recordBtn');
+    const hint = document.getElementById('recordHint');
+    
+    if (isRecording) {
+        btn.classList.add('recording');
+        btn.textContent = '⏹';
+        hint.textContent = '正在录音... 点击停止';
+        // Simulate recording for 3s
+        setTimeout(() => {
+            if (isRecording) {
+                toggleRecording();
+                simulateSpeakingScore();
+            }
+        }, 3000);
+    } else {
+        btn.classList.remove('recording');
+        btn.textContent = '🎙️';
+        hint.textContent = '点击按钮开始录音';
+    }
+}
+
+function simulateSpeakingScore() {
+    const fluency = (5.5 + Math.random() * 2.5).toFixed(1);
+    const vocab = (5.5 + Math.random() * 2).toFixed(1);
+    const grammar = (5.0 + Math.random() * 2.5).toFixed(1);
+    const pron = (5.0 + Math.random() * 2.5).toFixed(1);
+    
+    document.getElementById('fluencyScore').textContent = fluency;
+    document.getElementById('vocabScore').textContent = vocab;
+    document.getElementById('grammarSpkScore').textContent = grammar;
+    document.getElementById('pronScore').textContent = pron;
+    
+    const suggestions = [
+        '💡 建议：尝试使用更多连接词（however, furthermore, in addition）来提升流利度和连贯性。注意语速不要太快，适当停顿让考官理解你的观点。',
+        '💡 建议：词汇方面可以尝试使用更精确的表达，避免重复使用同一个词。语法上注意时态一致性，描述过去的经历时统一使用过去时。',
+        '💡 建议：发音方面可以多注意重音位置，英语是重音计时语言。流利度上建议先构思好整体框架再开口，减少 "um", "uh" 等填充词。'
+    ];
+    
+    document.getElementById('speakingSuggestion').textContent = suggestions[Math.floor(Math.random() * suggestions.length)];
+    document.getElementById('speakingScoreCard').classList.add('show');
+}
+
+// ===== REVIEW =====
+function switchReviewTab(tab, el) {
+    currentReviewTab = tab;
+    document.querySelectorAll('.review-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    
+    document.getElementById('reviewWordsList').style.display = tab === 'words' ? 'block' : 'none';
+    document.getElementById('reviewErrorsList').style.display = tab === 'errors' ? 'block' : 'none';
+}
+
+function renderReviewLists() {
+    // Render word book
+    const wordsContainer = document.getElementById('reviewWordsList');
+    if (wordBook.length === 0) {
+        wordsContainer.innerHTML = `<div class="empty-state"><div class="empty-state-icon">📖</div><div class="empty-state-text">生词本空空如也～<br>在学习中标记"不认识"的词会自动收录</div></div>`;
+    } else {
+        wordsContainer.innerHTML = wordBook.map((w, i) => `
+            <div class="review-item">
+                <div class="review-item-icon word">🔤</div>
+                <div class="review-item-info">
+                    <div class="review-item-main">${w.word}</div>
+                    <div class="review-item-sub">${w.meaning}</div>
+                </div>
+                <button class="review-item-action" onclick="removeFromWordBook(${i})">🗑️</button>
+            </div>
+        `).join('');
+    }
+    
+    // Render error book
+    const errorsContainer = document.getElementById('reviewErrorsList');
+    if (errorBook.length === 0) {
+        errorsContainer.innerHTML = `<div class="empty-state"><div class="empty-state-icon">❌</div><div class="empty-state-text">暂无错题记录～<br>做错的题目会自动收录</div></div>`;
+    } else {
+        errorsContainer.innerHTML = errorBook.map((e, i) => `
+            <div class="review-item">
+                <div class="review-item-icon error">📝</div>
+                <div class="review-item-info">
+                    <div class="review-item-main">${e.question}</div>
+                    <div class="review-item-sub">你的答案：${e.yourAnswer} ｜ 正确答案：${e.correctAnswer} <span style="color:var(--accent-purple);font-weight:600;">[${e.module}]</span></div>
+                </div>
+                <button class="review-item-action" onclick="removeFromErrorBook(${i})">🗑️</button>
+            </div>
+        `).join('');
+    }
+}
+
+function removeFromWordBook(index) {
+    wordBook.splice(index, 1);
+    document.getElementById('reviewWordCount').textContent = wordBook.length;
+    renderReviewLists();
+    showToast('已从生词本移除');
+}
+
+function removeFromErrorBook(index) {
+    errorBook.splice(index, 1);
+    document.getElementById('reviewErrorCount').textContent = errorBook.length;
+    renderReviewLists();
+    showToast('已从错题本移除');
+}
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', () => {
+    updateGreeting();
+    initAudioVisual();
+});
+</script>
+
+</body>
+</html>
